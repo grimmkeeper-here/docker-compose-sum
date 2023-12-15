@@ -1,0 +1,90 @@
+version: "3.8"
+
+services:
+  kafka-node-1:
+    container_name: kafka-node-1
+    image: docker.io/bitnami/kafka:3.6
+    ports:
+      - "9092:9092"
+      - "9093:9093"
+      - "9094:9094"
+    volumes:
+      - type: volume
+        source: kafka-node-1-data
+        target: /bitnami
+    environment:
+      # KRaft settings
+      KAFKA_CFG_NODE_ID: 1
+      KAFKA_CFG_PROCESS_ROLES: controller,broker
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 1@kafka-node-1:9093,2@kafka-node-2:9096
+      KAFKA_KRAFT_CLUSTER_ID: aRIH7WNjXEO9uPw0yUd0Ig==
+      # Listeners
+      KAFKA_CFG_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://0.0.0.0:9094
+      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://:9092,EXTERNAL://localhost:9094
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+
+  kafka-node-2:
+    container_name: kafka-node-2
+    image: docker.io/bitnami/kafka:3.6
+    ports:
+      - "9095:9095"
+      - "9096:9096"
+      - "9097:9097"
+    volumes:
+      - type: volume
+        source: kafka-node-2-data
+        target: /bitnami
+    environment:
+      # KRaft settings
+      KAFKA_CFG_NODE_ID: 2
+      KAFKA_CFG_PROCESS_ROLES: controller,broker
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 1@kafka-node-1:9093,2@kafka-node-2:9096
+      KAFKA_KRAFT_CLUSTER_ID: aRIH7WNjXEO9uPw0yUd0Ig==
+      # Listeners
+      KAFKA_CFG_LISTENERS: PLAINTEXT://:9095,CONTROLLER://:9096,EXTERNAL://0.0.0.0:9097
+      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://:9095,EXTERNAL://localhost:9097
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+
+  kafka-node-3:
+    container_name: kafka-node-3
+    image: docker.io/bitnami/kafka:3.6
+    ports:
+      - "9098:9098"
+      - "9100:9100"
+    volumes:
+      - type: volume
+        source: kafka-node-3-data
+        target: /bitnami
+    environment:
+      # KRaft settings
+      KAFKA_CFG_NODE_ID: 3
+      KAFKA_CFG_PROCESS_ROLES: broker
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 1@kafka-node-1:9093,2@kafka-node-2:9096
+      KAFKA_KRAFT_CLUSTER_ID: aRIH7WNjXEO9uPw0yUd0Ig==
+      # Listeners
+      KAFKA_CFG_LISTENERS: PLAINTEXT://:9098,EXTERNAL://0.0.0.0:9100
+      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://:9098,EXTERNAL://localhost:9100
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+
+  kafka-ui:
+     container_name: kafka-ui
+     image: provectuslabs/kafka-ui:latest
+     ports:
+       - 3003:8080
+     restart: "always"
+     environment:
+       KAFKA_CLUSTERS_0_NAME: aRIH7WNjXEO9uPw0yUd0Ig==
+       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka-node-1:9092
+     depends_on:
+       - kafka-node-1
+
+volumes:
+  kafka-node-1-data:
+  kafka-node-2-data:
+  kafka-node-3-data:

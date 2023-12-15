@@ -1,0 +1,51 @@
+version: "3.8"
+
+services:
+  rabbitmq-node-1:
+    container_name: rabbitmq-node-1
+    image: 'bitnami/rabbitmq:3.11.25-debian-11-r1'
+    environment:
+      RABBITMQ_NODE_TYPE: stats
+      RABBITMQ_NODE_NAME: rabbit@rabbitmq-node-1
+      RABBITMQ_ERL_COOKIE: s3cr3tc00ki3
+      RABBITMQ_USERNAME: ${RABBITMQ_USER}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+    ports:
+      - '25672:25672'
+      - '15672:15672'
+      - '5672:5672'
+    volumes:
+      - type: volume
+        source: rabbitmq-node-1-data
+        target: /bitnami/rabbitmq/mnesia
+
+  rabbitmq-node-2:
+    container_name: rabbitmq-node-2
+    image: 'bitnami/rabbitmq:3.11.25-debian-11-r1'
+    environment:
+      RABBITMQ_NODE_TYPE: queue-disc
+      RABBITMQ_NODE_NAME: rabbit@rabbitmq-node-2
+      RABBITMQ_CLUSTER_NODE_NAME: rabbit@rabbitmq-node-1
+      RABBITMQ_ERL_COOKIE: s3cr3tc00ki3
+    volumes:
+      - type: volume
+        source: rabbitmq-node-2-data
+        target: /bitnami/rabbitmq/mnesia
+
+  rabbitmq-node-3:
+    container_name: rabbitmq-node-3
+    image: 'bitnami/rabbitmq:3.11.25-debian-11-r1'
+    environment:
+      RABBITMQ_NODE_TYPE: queue-ram
+      RABBITMQ_NODE_NAME: rabbit@rabbitmq-node-3
+      RABBITMQ_CLUSTER_NODE_NAME: rabbit@rabbitmq-node-1
+      RABBITMQ_ERL_COOKIE: s3cr3tc00ki3
+    volumes:
+      - type: volume
+        source: rabbitmq-node-3-data
+        target: /bitnami/rabbitmq/mnesia
+
+volumes:
+  rabbitmq-node-1-data:
+  rabbitmq-node-2-data:
+  rabbitmq-node-3-data:

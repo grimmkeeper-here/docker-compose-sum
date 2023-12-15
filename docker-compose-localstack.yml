@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  localstack:
+    container_name: localstack
+    image: localstack/localstack:3.0
+    ports:
+      - "4566:4566"
+      - "4510-4559:4510-4559"
+    volumes:
+      - type: volume
+        source: localstack-data
+        target: /var/lib/localstack
+
+volumes:
+  localstack-data:

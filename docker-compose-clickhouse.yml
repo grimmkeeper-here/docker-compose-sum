@@ -1,0 +1,95 @@
+version: "3.8"
+  
+x-clickhouse-default: &clickhouse-default
+  restart: unless-stopped
+  image: clickhouse/clickhouse-server:23.10.3.5-alpine
+  # Set limit number file access
+  ulimits:
+    nproc: 65535
+    nofile:
+      soft: "262144"
+      hard: "262144"
+
+services:
+  ch-client-1:
+    <<: *clickhouse-default
+    container_name: ch-client-1
+
+  ch-server-1:
+    <<: *clickhouse-default
+    container_name: ch-server-1
+    environment:
+      CLICKHOUSE_USER: ${CLICKHOUSE_USER}
+      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD}
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 1
+      HOST_EXPOSE: ${HOST_EXPOSE}
+    ports:
+      - '8123:8123'
+      - '9000:9000'
+      - '9181:9181'
+    volumes:
+      - type: volume
+        source: ch-server-1-data
+        target: /var/lib/clickhouse
+      - "./configs/gen/ch-server-1:/etc/clickhouse-server/config.d/"
+
+  ch-server-1-rep:
+    <<: *clickhouse-default
+    container_name: ch-server-1-rep
+    environment:
+      CLICKHOUSE_USER: ${CLICKHOUSE_USER}
+      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD}
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 1
+      HOST_EXPOSE: ${HOST_EXPOSE}
+    ports:
+      - '8124:8123'
+      - '9001:9000'
+      - '9182:9181'
+    volumes:
+      - type: volume
+        source: ch-server-1-rep-data
+        target: /var/lib/clickhouse
+      - "./configs/gen/ch-server-1-rep:/etc/clickhouse-server/config.d/"
+
+  ch-server-2:
+    <<: *clickhouse-default
+    container_name: ch-server-2
+    environment:
+      CLICKHOUSE_USER: ${CLICKHOUSE_USER}
+      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD}
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 1
+      HOST_EXPOSE: ${HOST_EXPOSE}
+    ports:
+      - '8125:8123'
+      - '9002:9000'
+      - '9183:9181'
+    volumes:
+      - type: volume
+        source: ch-server-2-data
+        target: /var/lib/clickhouse
+      - "./configs/gen/ch-server-2:/etc/clickhouse-server/config.d/"
+
+
+  ch-server-2-rep:
+    <<: *clickhouse-default
+    container_name: ch-server-2-rep
+    environment:
+      CLICKHOUSE_USER: ${CLICKHOUSE_USER}
+      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD}
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 1
+      HOST_EXPOSE: ${HOST_EXPOSE}
+    ports:
+      - '8126:8123'
+      - '9003:9000'
+      - '9184:9181'
+    volumes:
+      - type: volume
+        source: ch-server-2-rep-data
+        target: /var/lib/clickhouse
+      - "./configs/gen/ch-server-2-rep:/etc/clickhouse-server/config.d/"
+
+volumes:
+  ch-server-1-data:
+  ch-server-1-rep-data:
+  ch-server-2-rep-data:
+  ch-server-2-data:
