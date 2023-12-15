@@ -46,7 +46,7 @@ clickhouse-up:
 clickhouse-clean:
 	docker container rm --force $$(docker ps -a -f name=ch-client -aq)
 	docker container rm --force $$(docker ps -a -f name=ch-server -aq)
-	docker volume rm $$(docker volume ls -f name=anti-fraud_ch-server -q) 
+	docker volume rm $$(docker volume ls -f name=docker-compose-sum_ch-server -q) 
 	docker volume prune -f
 
 .PHONY: kafka-up
@@ -57,7 +57,7 @@ kafka-up:
 kafka-clean:
 	docker container rm --force $$(docker ps -a -f name=kafka-node -aq)
 	docker container rm --force $$(docker ps -a -f name=kafka-ui -aq)
-	docker volume rm $$(docker volume ls -f name=anti-fraud_kafka-node -q)
+	docker volume rm $$(docker volume ls -f name=docker-compose-sum_kafka-node -q)
 
 
 .PHONY: redis-up
@@ -67,7 +67,7 @@ redis-up:
 .PHONY: redis-clean
 redis-clean:
 	docker container rm --force $$(docker ps -a -f name=redis-node -aq)
-	docker volume rm $$(docker volume ls -f name=anti-fraud_redis-node -q)
+	docker volume rm $$(docker volume ls -f name=docker-compose-sum_redis-node -q)
 
 .PHONY: rabbitmq-up
 rabbitmq-up:
@@ -76,7 +76,7 @@ rabbitmq-up:
 .PHONY: rabbitmq-clean
 rabbitmq-clean:
 	docker container rm --force $$(docker ps -a -f name=rabbitmq-node -aq)
-	docker volume rm $$(docker volume ls -f name=anti-fraud_rabbitmq-node -q)
+	docker volume rm $$(docker volume ls -f name=docker-compose-sum_rabbitmq-node -q)
 
 .PHONY: localstack-up
 localstack-up:
@@ -85,7 +85,7 @@ localstack-up:
 .PHONY: localstack-clean
 localstack-clean:
 	docker container rm --force $$(docker ps -a -f name=localstack -aq)
-	docker volume rm $$(docker volume ls -f name=anti-fraud_localstack -q)
+	docker volume rm $$(docker volume ls -f name=docker-compose-sum_localstack -q)
 
 .PHONY: mysql-up
 mysql-up:
@@ -95,4 +95,4 @@ mysql-up:
 mysql-clean:
 	docker container rm --force $$(docker ps -a -f name=mysql -aq)
 	docker container rm --force $$(docker ps -a -f name=adminer -aq)
-	docker volume rm $$(docker volume ls -f name=anti-fraud_mysql -q)
+	docker volume rm $$(docker volume ls -f name=docker-compose-sum_mysql -q)
