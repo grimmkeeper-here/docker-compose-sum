@@ -8,6 +8,7 @@ REDIS_DOCKER_COMPOSE_FILE := ./docker-compose-redis.yml
 RABBITMQ_DOCKER_COMPOSE_FILE := ./docker-compose-rabbitmq.yml
 LOCALSTACK_DOCKER_COMPOSE_FILE := ./docker-compose-localstack.yml
 MYSQL_DOCKER_COMPOSE_FILE := ./docker-compose-mysql.yml
+ELK_DOCKER_COMPOSE_FILE := ./docker-compose-elk.yml
 
 # Import dot env file
 ifneq (,$(wildcard ${DEV_ENV_DIR}))
@@ -96,3 +97,12 @@ mysql-clean:
 	docker container rm --force $$(docker ps -a -f name=mysql -aq)
 	docker container rm --force $$(docker ps -a -f name=adminer -aq)
 	docker volume rm $$(docker volume ls -f name=docker-compose-sum_mysql -q)
+
+.PHONY: elk-up
+elk-up:
+	docker-compose --env-file ${DEV_ENV_DIR} -f ${ELK_DOCKER_COMPOSE_FILE} up --build
+
+.PHONY: elk-clean
+elk-clean:
+	docker container rm --force $$(docker ps -a -f name=elk -aq)
+	# docker volume rm $$(docker volume ls -f name=docker-compose-sum_elk -q)

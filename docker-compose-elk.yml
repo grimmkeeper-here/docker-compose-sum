@@ -1,0 +1,21 @@
+version: "3.8"
+services:
+  elasticsearch:
+    container_name: elk-es
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+    ports:
+      - "9200:9200"
+
+  kibana:
+    platform: linux/x86_64
+    container_name: elk-kibana 
+    image: docker.elastic.co/kibana/kibana:7.11.0
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elk-es:9200
+    depends_on:
+      - elasticsearch
+    ports:
+      - "5601:5601"
