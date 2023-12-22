@@ -1,0 +1,72 @@
+<clickhouse>
+    <remote_servers>
+        <!-- Cluster name -->
+        <ch_cluster_test_1>
+        <!---->
+            <shard>
+                <replica>
+                    <host>ch-server-1</host>
+                    <port>9000</port>
+                    <user from_env="CLICKHOUSE_USER"/>
+                    <password from_env="CLICKHOUSE_PASSWORD"/>
+                </replica>
+                <replica>
+                    <host>ch-server-1-rep</host>
+                    <port>9000</port>
+                    <user from_env="CLICKHOUSE_USER"/>
+                    <password from_env="CLICKHOUSE_PASSWORD"/>
+                </replica>
+            </shard>
+            <shard>
+                <replica>
+                    <host>ch-server-2</host>
+                    <port>9000</port>
+                    <user from_env="CLICKHOUSE_USER"/>
+                    <password from_env="CLICKHOUSE_PASSWORD"/>
+                </replica>
+                <replica>
+                    <host>ch-server-2-rep</host>
+                    <port>9000</port>
+                    <user from_env="CLICKHOUSE_USER"/>
+                    <password from_env="CLICKHOUSE_PASSWORD"/>
+                </replica>
+            </shard>
+        <!-- Cluster name -->
+        </ch_cluster_test_1>
+        <!---->
+        <!-- Cluster name -->
+        <ch_cluster_test_2>
+        <!---->
+            <shard>
+                <replica>
+                    <host>ch-server-1</host>
+                    <port>9000</port>
+                    <user from_env="CLICKHOUSE_USER"/>
+                    <password from_env="CLICKHOUSE_PASSWORD"/>
+                </replica>
+                <replica>
+                    <host>ch-server-1-rep</host>
+                    <port>9000</port>
+                    <user from_env="CLICKHOUSE_USER"/>
+                    <password from_env="CLICKHOUSE_PASSWORD"/>
+                </replica>
+            </shard>
+            <shard>
+                <replica>
+                    <host>ch-server-2</host>
+                    <port>9000</port>
+                    <user from_env="CLICKHOUSE_USER"/>
+                    <password from_env="CLICKHOUSE_PASSWORD"/>
+                </replica>
+                <replica>
+                    <host>ch-server-2-rep</host>
+                    <port>9000</port>
+                    <user from_env="CLICKHOUSE_USER"/>
+                    <password from_env="CLICKHOUSE_PASSWORD"/>
+                </replica>
+            </shard>
+        <!-- Cluster name -->
+        </ch_cluster_test_2>
+        <!---->
+    </remote_servers>
+</clickhouse>

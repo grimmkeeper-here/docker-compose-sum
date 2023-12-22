@@ -9,6 +9,7 @@ RABBITMQ_DOCKER_COMPOSE_FILE := ./docker-compose-rabbitmq.yml
 LOCALSTACK_DOCKER_COMPOSE_FILE := ./docker-compose-localstack.yml
 MYSQL_DOCKER_COMPOSE_FILE := ./docker-compose-mysql.yml
 ELK_DOCKER_COMPOSE_FILE := ./docker-compose-elk.yml
+MONITOR_DOCKER_COMPOSE_FILE = ./docker-compose-monitor.yml
 
 # Import dot env file
 ifneq (,$(wildcard ${DEV_ENV_DIR}))
@@ -106,3 +107,14 @@ elk-up:
 elk-clean:
 	docker container rm --force $$(docker ps -a -f name=elk -aq)
 	# docker volume rm $$(docker volume ls -f name=docker-compose-sum_elk -q)
+
+.PHONY: monitor-up
+monitor-up:
+	docker-compose --env-file ${DEV_ENV_DIR} -f ${MONITOR_DOCKER_COMPOSE_FILE} up --build
+
+.PHONY: monitor-clean
+monitor-clean:
+	docker container rm --force $$(docker ps -a -f name=prometheus -aq)
+	docker container rm --force $$(docker ps -a -f name=grafana -aq)
+	docker volume rm $$(docker volume ls -f name=docker-compose-sum_prometheus -q)
+	docker volume rm $$(docker volume ls -f name=docker-compose-sum_grafana -q)
